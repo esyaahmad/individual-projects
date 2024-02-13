@@ -4,6 +4,10 @@ const categoryController = require('../controllers/categoryController')
 const projectController = require('../controllers/projectController')
 const {authentication} = require('../middlewares/authentication')
 const {authorization} = require('../middlewares/authorization')
+const upload = require('../utils/multer')
+const middlewareUpload = upload.single("file");
+
+
 
 
 //users endpoint
@@ -18,7 +22,7 @@ router.get('/projects/:id', projectController.getProjectsById)
 router.post('/projects', projectController.addProject)
 router.put('/projects/:id', authorization,projectController.editProjectById)
 router.delete('/projects/:id', authorization, projectController.deleteProject)
-router.patch('/projects/:id', authorization, projectController.patchProject)
+router.patch('/projects/:id', authorization, middlewareUpload, projectController.patchProject)
 
 
 //category endpoint

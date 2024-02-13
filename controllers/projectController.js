@@ -1,5 +1,5 @@
 const { Project , User, Category} = require('../models/index')
-
+const {uploader, handleUpload} =require ('../utils/cloudinaryConfig')
 
 class projectController {
 
@@ -83,9 +83,30 @@ class projectController {
 
     static async patchProject(req,res,next) {
         try {
+            const { id } = req.params;
+            const project = await Project.findByPk(id);
             
+            // console.log(req.file);
+            if(!req.file) {
+                throw {name : 'InvalidDataType'}
+            }
+            const imageInBase64 = req.file.buffer.toString("base64");
+            let dataURI = "data:" + req.file.mimetype + ";base64," + imageInBase64;
+            const result= await handleUpload(dataURI)
+            // const image = result.url;
+            console.log(result);
+            if (!project) {
+                throw {name : 'NotFound'}
+            } else {
+                // console.log(req.body);
+                const { imageUrl } = req.body;
+                await project.update({ imageUrl : result.url});
+                res.status(200).json({ message: `Image ${project.title} success to update`, imageUrl : result.url });
+            }
+
         } catch (error) {
             console.log(error);
+            next(error)
         }
     }
 
