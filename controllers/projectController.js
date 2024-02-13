@@ -36,9 +36,15 @@ class projectController {
 
     static async addProject(req,res,next) {
         try {
-            
+             // console.log(req.body);
+            const { userId } = req.loginInfo
+             const { title, description, categoryId, imageUrl} = req.body
+             const project = await Project.create({ title, description, imageUrl, categoryId, userId })
+             res.status(201).json(project)
         } catch (error) {
             console.log(error);
+            next(error)
+
         }
     }
 
