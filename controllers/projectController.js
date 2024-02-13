@@ -1,12 +1,21 @@
+const { Project , User, Category} = require('../models/index')
 
 
 class projectController {
 
     static async getProjects(req,res,next) {
         try {
-            
+            const project = await Project.findAll({
+                include: {
+                    model: User,
+                    attributes: {exclude: ["password"]} 
+                }
+            })
+            res.status(200).json({project})
         } catch (error) {
             console.log(error);
+            next(error)
+
         }
     }
 
