@@ -50,17 +50,34 @@ class projectController {
 
     static async editProjectById(req,res,next) {
         try {
-            
+            const id = req.params.id
+            const projectFind = await Project.findByPk(id)
+            if(!projectFind) {
+                throw {name : 'NotFound'}
+            }
+
+            const { title, description, categoryId, imageUrl } = req.body
+            const project = await projectFind.update({ title, description, categoryId, imageUrl })
+            // const projectFindUpdate = await project.findByPk(id)
+            res.status(200).json(project) 
         } catch (error) {
             console.log(error);
+            next(error)
         }
     }
 
     static async deleteProject(req,res,next) {
         try {
-            
+            const id = req.params.id
+            const projectFind = await Project.findByPk(id)
+            if(!projectFind) {
+                throw {name : 'NotFound'}
+            }
+            await Project.destroy({where : {id:id}})
+            res.status(200).json({message: `${projectFind.name} success to delete`}) 
         } catch (error) {
             console.log(error);
+            next(error)
         }
     }
 
