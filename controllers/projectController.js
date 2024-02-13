@@ -74,7 +74,7 @@ class projectController {
                 throw {name : 'NotFound'}
             }
             await Project.destroy({where : {id:id}})
-            res.status(200).json({message: `${projectFind.name} success to delete`}) 
+            res.status(200).json({message: `${projectFind.title} success to delete`}) 
         } catch (error) {
             console.log(error);
             next(error)
