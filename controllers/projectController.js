@@ -34,6 +34,21 @@ class projectController {
         }
     }
 
+    static async getProjectsByUserId(req,res,next) {
+        try {
+            const {userId} = req.loginInfo
+            const project = await Project.findAll({where:{userId}})
+            if(!project) {
+                throw {name: 'NotFound'}
+            }
+            res.status(200).json(project)
+        } catch (error) {
+            console.log(error);
+            next(error)
+
+        }
+    }
+
     static async addProject(req,res,next) {
         try {
              // console.log(req.body);

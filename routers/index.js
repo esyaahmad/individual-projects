@@ -13,12 +13,15 @@ const middlewareUpload = upload.single("file");
 //users endpoint
 router.post('/register', userController.register)
 router.post('/login', userController.login)
+router.post('/google-login', userController.googleLogin)
 router.use(authentication)
 
 
 //project endpoint
 router.get('/projects', projectController.getProjects)
 router.get('/projects/:id', projectController.getProjectsById)
+router.get('/projects-user', projectController.getProjectsByUserId)
+
 router.post('/projects', projectController.addProject)
 router.put('/projects/:id', authorization,projectController.editProjectById)
 router.delete('/projects/:id', authorization, projectController.deleteProject)
